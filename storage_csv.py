@@ -27,7 +27,6 @@ class StorageCsv(IStorage):
                 reader = csv.DictReader(file)  # DictReader automatically skips headers
 
                 for row in reader:
-                    print(f"Reading row: {row}")  # Debugging output
 
                     # Skip rows where the title is missing (prevents empty rows)
                     if not row['title'] or row['title'].lower() == "title":
@@ -40,8 +39,6 @@ class StorageCsv(IStorage):
                         'rating': float(row['rating']),
                         'poster': row['poster']
                     }
-
-            print("Loaded movies:", movies)  # Debugging statement
 
         except FileNotFoundError:
             print("No existing CSV file found. Starting fresh.")

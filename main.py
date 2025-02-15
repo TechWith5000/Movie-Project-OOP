@@ -1,5 +1,6 @@
 from movie_app import MovieApp
 from storage_json import StorageJson
+from storage_csv import StorageCsv
 
 
 def main():
@@ -9,12 +10,12 @@ def main():
     This function creates a JSON storage instance and a MovieApp instance,
     then runs the application.
     """
-    # Define the path to the JSON file
-    json_file_path = 'data.json'
+    # Define the path to the storage file
+    file_path = 'movies.csv'
 
     # Create a StorageJSON instance
     try:
-        storage = StorageJson(json_file_path)
+        storage = StorageCsv(file_path)
         movie_app = MovieApp(storage)
         movie_app.run()
     except Exception as e:

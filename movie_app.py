@@ -1,4 +1,5 @@
 from istorage import IStorage
+from omdb_api import get_movie_info
 
 class MovieApp:
     def __init__(self, storage):
@@ -32,21 +33,32 @@ class MovieApp:
     def _command_add_movie(self):
         """Add a new movie to the storage."""
         title = input("Enter the title: ")
-        year = int(input("Enter the year: "))
-        rating = float(input("Enter a rating: "))
-        poster = input("Enter poster url string: ")
-        movies = self._storage.list_movies()
+        movies = self._fetch_movie_data(title)
 
         if movies:
             try:
                 self._storage.add_movie(
-                    title, year, rating, poster
+                    movies['Title'],
+                    int(movies['Year']),
+                    float(movies['imdbRating']),
+                    movies['Poster']
                 )
-                print(f"Movie '{title}' added successfully.")
+                print(f"Movie '{movies['Title']}' added successfully.")
             except TypeError as e:
                 print(f"Error adding movie: {e}")
         else:
             print("Movie could not be found.")
+
+    def _fetch_movie_data(self, title: str):
+        """Fetch movie data from the OMDb API."""
+        try:
+            movie_info = get_movie_info(title)
+            if movie_info and movie_info.get('Response') == 'True':
+                return movie_info
+            return None
+        except Exception as e:
+            print(f"Error retrieving movie data: {e}")
+            return None
 
     def _command_delete_movie(self):
         """Delete a movie from the storage."""
