@@ -1,0 +1,17 @@
+{
+    "All at once": {
+        "year": 2001,
+        "rating": 7.8,
+        "poster": "poster_another"
+    },
+    "My choice": {
+        "year": 1998,
+        "rating": 9.7,
+        "poster": "url"
+    },
+    "It is": {
+        "year": 2004,
+        "rating": 7.8,
+        "poster": "url2"
+    }
+}
