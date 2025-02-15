@@ -86,7 +86,51 @@ class MovieApp:
             print(f"Error updating movie: {e}")
 
     def _generate_website(self):
-        ...
+        """Generate a simple HTML website with movie data."""
+        movies = self._storage.list_movies()
+        html_content = self._create_html_content(movies)
+
+        with open("index.html", "w", encoding='utf-8') as file:
+            file.write(html_content)
+        print("Website was generated successfully.")
+
+    @staticmethod
+    def _create_html_content(movies):
+        """Generate HTML content for the Movie Website."""
+        html_template = """
+        <html>
+        <head>
+            <title>My Movie App</title>
+            <link rel="stylesheet" href="style.css"/>
+        </head>
+        <body>
+            <div class="list-movies-title">
+                <h1>My Movie App</h1>
+            </div>
+            <div>
+                <ol class="movie-grid">
+                    {movie_entries}
+                </ol>
+            </div>
+        </body>
+        </html>
+        """
+
+        movie_entries = "".join(
+            f"""
+            <li>
+                <div class="movie">
+                    <img class="movie-poster"
+                         src="{details.get('poster', '')}" alt="{title} Poster"/>
+                    <div class="movie-title">{title}</div>
+                    <div class="movie-year">{details['year']}</div>
+                </div>
+            </li>
+            """
+            for title, details in movies.items()
+        )
+
+        return html_template.format(movie_entries=movie_entries)
 
     def run(self):
         """Run the main application loop."""
