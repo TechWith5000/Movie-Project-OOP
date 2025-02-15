@@ -1,4 +1,5 @@
 import csv
+import os
 from istorage import IStorage
 
 class StorageCsv(IStorage):
@@ -20,18 +21,32 @@ class StorageCsv(IStorage):
             dict: A dictionary of movies.
         """
         movies = {}
+
         try:
             with open(self.file_path, mode='r', newline='', encoding='utf-8') as file:
-                reader = csv.DictReader(file)
+                reader = csv.DictReader(file)  # DictReader automatically skips headers
+
                 for row in reader:
+                    print(f"Reading row: {row}")  # Debugging output
+
+                    # Skip rows where the title is missing (prevents empty rows)
+                    if not row['title'] or row['title'].lower() == "title":
+                        print("Skipping invalid row:", row)
+                        continue
+
+                        # Convert values to correct types
                     movies[row['title']] = {
-                        'year': int(row['year']),
+                        'year': int(row['year']),  # Ensure this is a number
                         'rating': float(row['rating']),
                         'poster': row['poster']
                     }
-            return movies
+
+            print("Loaded movies:", movies)  # Debugging statement
+
         except FileNotFoundError:
-            return {}
+            print("No existing CSV file found. Starting fresh.")
+
+        return movies
 
     def add_movie(self, title: str, year: int, rating: float, poster: str):
         """Add a movie to the database.
@@ -112,9 +127,13 @@ class StorageCsv(IStorage):
         Args:
             movies (dict): The movies to save.
         """
+
         with open(self.file_path, mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=['title', 'year', 'rating', 'poster'])
+            fieldnames = ['title', 'year', 'rating', 'poster']
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+
             writer.writeheader()
+
             for title, details in movies.items():
                 writer.writerow({
                     'title': title,
@@ -122,3 +141,4 @@ class StorageCsv(IStorage):
                     'rating': details['rating'],
                     'poster': details['poster']
                 })
+
