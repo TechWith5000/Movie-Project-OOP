@@ -1,4 +1,3 @@
-from istorage import IStorage
 from omdb_api import get_movie_info
 
 class MovieApp:

@@ -1,6 +1,5 @@
 from movie_app import MovieApp
-from storage_json import StorageJson
-from storage_csv import StorageCsv
+from storage.storage_csv import StorageCsv
 
 
 def main():
@@ -11,7 +10,7 @@ def main():
     then runs the application.
     """
     # Define the path to the storage file
-    file_path = 'movies.csv'
+    file_path = 'data/movies.csv'
 
     # Create a StorageJSON instance
     try:
